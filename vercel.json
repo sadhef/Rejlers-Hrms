@@ -1,6 +1,13 @@
 {
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "vite",
+  "redirects": [
+    {
+      "source": "/:path((?!rejlershrms(?:/|$)).*)",
+      "destination": "/rejlershrms/:path",
+      "permanent": false
+    }
+  ],
   "rewrites": [
     {
       "source": "/rejlershrms/:dir(assets|brand)/:file*",
