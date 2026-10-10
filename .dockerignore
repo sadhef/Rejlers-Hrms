@@ -1,0 +1,13 @@
+*
+!Dockerfile
+!nginx.conf
+!package.json
+!package-lock.json
+!index.html
+!vite.config.js
+!tailwind.config.js
+!postcss.config.cjs
+!src/
+!src/**
+!public/
+!public/**

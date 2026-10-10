@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: rejlers-hrms-frontend
+  namespace: prod
+spec:
+  replicas: 1
+  revisionHistoryLimit: 3
+  progressDeadlineSeconds: 180
+  selector:
+    matchLabels:
+      app: rejlers-hrms-frontend
+  template:
+    metadata:
+      labels:
+        app: rejlers-hrms-frontend
+    spec:
+      automountServiceAccountToken: false
+      nodeSelector:
+        kubernetes.io/hostname: ${KUBE_NODE_HOSTNAME}
+      containers:
+        - name: rejlers-hrms-frontend
+          image: ${IMAGE}
+          imagePullPolicy: Never
+          ports:
+            - name: http
+              containerPort: 80
+          readinessProbe:
+            httpGet:
+              path: /rejlershrms/index.html
+              port: http
+            initialDelaySeconds: 5
+            periodSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /healthz
+              port: http
+            initialDelaySeconds: 10
+            periodSeconds: 10
+          resources:
+            requests:
+              cpu: 50m
+              memory: 64Mi
+            limits:
+              cpu: 500m
+              memory: 128Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: rejlers-hrms-frontend-svc
+  namespace: prod
+spec:
+  selector:
+    app: rejlers-hrms-frontend
+  ports:
+    - name: http
+      port: 80
+      targetPort: http
+---
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: rejlers-hrms-frontend-vs
+  namespace: prod
+spec:
+  hosts:
+    - syncme.biztras.com
+  gateways:
+    - jenkins/jenkins-gateway
+  http:
+    - match:
+        - uri:
+            exact: /rejlershrms
+      redirect:
+        uri: /rejlershrms/
+    - match:
+        - uri:
+            prefix: /rejlershrms/
+      route:
+        - destination:
+            host: rejlers-hrms-frontend-svc.prod.svc.cluster.local
+            port:
+              number: 80

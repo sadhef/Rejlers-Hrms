@@ -1,0 +1,192 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Rejlers HRMS design-system tokens ──
+   Palette is Rejlers' published brand set: Deep Blue (primary), Graphite, and the three accent
+   families - Green, Turbine Blue and Passion - each with primary / accent / complement tints. */
+:root {
+  --font-sans: 'Inter', 'Helvetica Neue', Helvetica, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  font-family: var(--font-sans);
+  font-feature-settings: 'tnum' 1, 'cv11' 1;
+  color-scheme: light;
+  font-size: 15px;
+
+  /* Brand constants (theme-independent) */
+  --rj-deep: #2B3A55;   --rj-deep-accent: #617AAD;  --rj-deep-comp: #D3DAEA;
+  --rj-green: #7FCAB5;  --rj-green-accent: #2AA784; --rj-green-comp: #D4EDE7;
+  --rj-turbine: #73BDC8; --rj-turbine-accent: #0093A3; --rj-turbine-comp: #E3F2F4;
+  --rj-passion: #F6B2BB; --rj-passion-accent: #EE767E; --rj-passion-comp: #FCE4E5;
+  --rj-graphite: #484D52; --rj-graphite-accent: #B1A8A4; --rj-graphite-comp: #DBDBDC;
+
+  --bg: #F4F6FA;        --surface: #FFFFFF;     --surface-2: #EEF1F7;
+  --border: #E2E7F0;    --border-2: #C8D0DF;
+  --tx: #1C2638;        --tx2: #5F6878;         --tx3: #969DAA;
+  --pri: #2B3A55;       --pri-bg: #E6EBF5;      --pri-d: #1D2840;
+  --ink: #2B3A55;       --ink-2: #4E6597;       --ink-bg: #E9EDF6;
+  /* Secondary action colour - Turbine Blue accent, used for links, focus rings and highlights. */
+  --acc: #0093A3;       --acc-bg: #E3F2F4;
+  --ok: #1F8F6F;        --ok-bg: #DDF1EA;
+  --warn: #A86A12;      --warn-bg: #FBF0DC;
+  --bad: #D2505A;       --bad-bg: #FCE4E5;
+  --app-canvas:
+    radial-gradient(ellipse at 6% 4%, rgb(115 189 200 / 16%) 0%, transparent 34%),
+    radial-gradient(ellipse at 94% 10%, rgb(211 218 234 / 70%) 0%, transparent 42%),
+    radial-gradient(ellipse at 70% 98%, rgb(127 202 181 / 12%) 0%, transparent 36%),
+    linear-gradient(135deg, #F1F4F9 0%, #F7F8FB 50%, #F0F4F7 100%);
+  --glass-chrome: rgb(255 255 255 / 66%);
+  --glass-sheen: rgb(255 255 255 / 34%);
+  /* Deep Blue sweep with a Turbine Blue lift - the login hero and highlight tiles. */
+  --brand-sweep: linear-gradient(150deg, #1E2A40 0%, #2B3A55 46%, #3C5A7A 80%, #2F7D8C 100%);
+  --shadow-pri: 0 14px 30px rgb(43 58 85 / 28%);
+
+  /* Deep Blue used for solid chips (tab-active pill, avatar initials, modal header) that always
+     pair with white text, in both themes. */
+  --ink-solid: #2B3A55;
+}
+
+/* ── dark theme: graphite night ground, Deep Blue lifted toward its accent tint for contrast ── */
+:root.dark {
+  color-scheme: dark;
+
+  --bg: #11151C;        --surface: #191E27;     --surface-2: #222833;
+  --border: #2A313D;    --border-2: #3B4453;
+  --tx: #E6E9EF;        --tx2: #9AA3B3;         --tx3: #6B7484;
+  --pri: #5470A3;       --pri-bg: #1F2A3F;      --pri-d: #AFC0E2;
+  --ink: #AFC0E2;       --ink-2: #8EA3CF;       --ink-bg: #1E2638;
+  --acc: #5FC3CF;       --acc-bg: #12303A;
+  --ok: #7FCAB5;        --ok-bg: #12302A;
+  --warn: #E5B865;      --warn-bg: #2E2614;
+  --bad: #F2939A;       --bad-bg: #36191C;
+  --ink-solid: #34476A;
+  --app-canvas:
+    radial-gradient(ellipse at 6% 4%, rgb(115 189 200 / 10%) 0%, transparent 34%),
+    radial-gradient(ellipse at 94% 10%, rgb(97 122 173 / 20%) 0%, transparent 42%),
+    radial-gradient(ellipse at 70% 98%, rgb(127 202 181 / 7%) 0%, transparent 36%),
+    linear-gradient(135deg, #12161E 0%, #151922 50%, #10151B 100%);
+  --glass-chrome: rgb(25 30 39 / 70%);
+  --glass-sheen: rgb(255 255 255 / 5%);
+  --shadow-pri: 0 14px 30px rgb(0 0 0 / 40%);
+}
+
+
+/* Dashboard welcome banner - the login hero's light & airy mist, graphite night in dark mode. */
+.rj-banner {
+  border: 1px solid #E3E8E4;
+  background: radial-gradient(ellipse at 85% 0%, #FFFFFF 0%, transparent 60%), linear-gradient(160deg, #F7F8F6 0%, #F1F4F1 55%, #E7F0EB 100%);
+}
+.rj-banner__orb { background: rgb(127 202 181 / 30%); }
+.rj-banner__r { stroke: rgb(72 77 82 / 5%); }
+:root.dark .rj-banner {
+  border-color: #2A2F35;
+  background: radial-gradient(ellipse at 85% 0%, rgb(127 202 181 / 10%) 0%, transparent 60%), linear-gradient(160deg, #1B1E22 0%, #23272B 55%, #1D2925 100%);
+}
+:root.dark .rj-banner__orb { background: rgb(127 202 181 / 12%); }
+:root.dark .rj-banner__r { stroke: rgb(255 255 255 / 4.5%); }
+
+* { box-sizing: border-box; }
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+input[type="number"] { -moz-appearance: textfield; appearance: textfield; }
+
+html,
+body,
+#root {
+  height: 100%;
+  overflow: hidden;
+}
+
+@supports (height: 100dvh) {
+  body,
+  #root {
+    height: 100dvh;
+  }
+}
+
+/* Uniform 80% UI scale on desktop so dense tables fit without shrinking mobile layouts. */
+@media (min-width: 1024px) {
+  html,
+  body,
+  #root {
+    height: 125vh;
+  }
+
+  html {
+    zoom: 0.8;
+  }
+}
+
+@supports (height: 100dvh) {
+  @media (min-width: 1024px) {
+    html,
+    body,
+    #root {
+      height: 125dvh;
+    }
+  }
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background-color: var(--bg);
+  color: var(--tx);
+}
+
+.liquid-glass-canvas {
+  isolation: isolate;
+  background: var(--app-canvas);
+}
+
+.liquid-glass-canvas::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  background: linear-gradient(112deg, var(--glass-sheen) 0%, transparent 34%, var(--glass-sheen) 68%, transparent 100%);
+}
+
+::-webkit-scrollbar { width: 9px; height: 9px; }
+::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 99px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+.no-scrollbar { scrollbar-width: none; -ms-overflow-style: none; }
+.no-scrollbar::-webkit-scrollbar { width: 0; height: 0; display: none; }
+
+/* Thicker, always-visible scrollbar for wide scrollable tables. */
+.table-scroll::-webkit-scrollbar { width: 12px; height: 12px; }
+.table-scroll::-webkit-scrollbar-track { background: var(--surface-2); }
+.table-scroll::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 99px; border: 2px solid var(--surface-2); }
+.table-scroll::-webkit-scrollbar-thumb:hover { background: var(--tx3); }
+.table-scroll { scrollbar-color: var(--border-2) var(--surface-2); }
+
+/* ── shared entrance/decorative motion ── */
+@keyframes gsFade { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: none; } }
+@keyframes gsPop { from { opacity: 0; transform: scale(.96); } to { opacity: 1; transform: none; } }
+@keyframes gsSlideIn { from { opacity: 0; transform: translateX(-10px); } to { opacity: 1; transform: none; } }
+@keyframes gsDrift { 0%, 100% { transform: translate(0, 0); } 50% { transform: translate(8px, -14px); } }
+
+@media (prefers-reduced-motion: no-preference) {
+  .gs-fade { animation: gsFade .45s ease both; }
+  .gs-pop { animation: gsPop .22s ease both; }
+  .gs-slide-in { animation: gsSlideIn .4s ease both; }
+  .gs-drift { animation: gsDrift 18s ease-in-out infinite; }
+}
+
+/* ── login form autofill ── */
+.glass-form input:-webkit-autofill,
+.glass-form input:-webkit-autofill:hover,
+.glass-form input:-webkit-autofill:focus {
+  -webkit-text-fill-color: var(--tx) !important;
+  caret-color: var(--tx) !important;
+  -webkit-box-shadow: 0 0 0 1000px var(--surface) inset !important;
+  box-shadow: 0 0 0 1000px var(--surface) inset !important;
+  background-color: transparent !important;
+  background-clip: padding-box !important;
+  border-color: var(--border-2) !important;
+  transition: background-color 9999s ease-out 0s;
+}
