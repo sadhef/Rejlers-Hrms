@@ -64,13 +64,13 @@ const Login = () => {
 
       <form onSubmit={handleSubmit} className="glass-form flex flex-col gap-4">
         <label className="text-[13px] font-medium uppercase tracking-[0.04em] text-[var(--tx2)]">
-          Work Email
+          Username
           <input
             value={username}
             onChange={(e) => setUsername(e.target.value)}
             autoComplete="username"
             autoFocus
-            placeholder="firstname.lastname@rejlers.com"
+            placeholder="Enter your username"
             className={fieldClass}
           />
         </label>

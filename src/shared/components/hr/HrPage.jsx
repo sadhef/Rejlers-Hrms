@@ -110,6 +110,7 @@ export const TabBar = ({ tabs, active, onChange }) => (
         key={tab}
         type="button"
         onClick={() => onChange(tab)}
+        aria-pressed={tab === active}
         className={[
           'min-h-11 flex-none cursor-pointer whitespace-nowrap rounded-full border px-5 py-2 text-[14.5px] font-medium transition-colors duration-200',
           tab === active
@@ -290,7 +291,7 @@ export const CardGrid = ({ cards, columns = 3 }) => (
     {cards.map((c, i) => (
       <div
         key={c.title}
-        className="gs-fade flex min-w-0 cursor-pointer flex-col gap-2.5 rounded-[14px] border border-[var(--border)] bg-[var(--surface)] p-5 transition-[background-color,border-color] duration-200 hover:border-[var(--pri)] hover:bg-[var(--surface-2)]"
+        className="gs-fade flex min-w-0 flex-col gap-2.5 rounded-[14px] border border-[var(--border)] bg-[var(--surface)] p-5"
         style={{ animationDelay: `${i * 0.04}s` }}
       >
         <div className="flex items-center gap-3.5">
@@ -310,12 +311,12 @@ export const CardGrid = ({ cards, columns = 3 }) => (
           </div>
           <div className="min-w-0">
             <div className="break-words text-[16px] font-medium text-[var(--tx)]">{c.title}</div>
-            <div className="mt-0.5 truncate text-[13.5px] text-[var(--tx3)]">{c.subtitle}</div>
+            <div className="mt-0.5 break-words text-[13.5px] text-[var(--tx2)]">{c.subtitle}</div>
           </div>
         </div>
         <div className="break-words text-[13.8px] leading-[1.55] text-[var(--tx2)]">{c.body}</div>
         <div className="mt-auto flex flex-wrap items-center justify-between gap-2 pt-2.5">
-          <span className="text-[12.5px] text-[var(--tx3)]">{c.meta}</span>
+          <span className="text-[12.5px] text-[var(--tx2)]">{c.meta}</span>
           <StatusBadge>{c.badge}</StatusBadge>
         </div>
       </div>

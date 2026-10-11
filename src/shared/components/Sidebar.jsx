@@ -16,12 +16,20 @@ const NAV_GROUPS = [
     items: [
       { to: '/attendance', label: 'Attendance', icon: 'siteCheckIn' },
       { to: '/leave', label: 'Leave Requests', icon: 'calendar' },
+      { to: '/payslips', label: 'Payroll', icon: 'file' },
+    ],
+  },
+  {
+    label: 'Company',
+    items: [
+      { to: '/announcements', label: 'Announcements', icon: 'bell' },
+      { to: '/directory', label: 'Team Directory', icon: 'users' },
     ],
   },
 ];
 
 /**
- * Primary navigation rail: grouped nav with a Deep Blue active pill and the Rejlers triangle watermark,
+ * Primary navigation rail: grouped nav with a Deep Blue active pill and the Rejlers brand watermark,
  * sliding in as an overlay below the `lg` breakpoint. The signed-in user's identity lives in the
  * header instead of being repeated here.
  * @param {boolean} mobileOpen - Whether the mobile overlay is currently open.

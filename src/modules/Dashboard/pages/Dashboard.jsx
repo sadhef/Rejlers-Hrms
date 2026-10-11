@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useQuery } from '@tanstack/react-query';
 import Layout from '../../../shared/components/Layout.jsx';
 import { ErrorState } from '../../../shared/components/hr/HrPage.jsx';
@@ -12,10 +12,17 @@ import { listAttendance } from '../../Attendance/services/attendanceService.js';
 import { getBalances, getLeaveList } from '../../Leave/services/leaveService.js';
 import { formatDateRange, formatTime } from '../../../shared/utils/date.js';
 
+import { SAMPLE_ANNOUNCEMENTS } from '../../Announcements/data/sampleData.js';
+import { SAMPLE_COLLEAGUES } from '../../Directory/data/sampleData.js';
+import { SAMPLE_PAYSLIPS } from '../../Payslips/data/sampleData.js';
+
 const SERVICES = [
   { to: '/profile', label: 'My Profile', desc: 'Visa, passport and HR record', icon: 'user' },
   { to: '/attendance', label: 'Attendance', desc: 'Check-ins and working hours', icon: 'siteCheckIn' },
   { to: '/leave', label: 'Leave Requests', desc: 'Apply for leave or check balance', icon: 'calendar' },
+  { to: '/payslips', label: 'Payroll', desc: 'Salary statements and pay totals', icon: 'file' },
+  { to: '/announcements', label: 'Announcements', desc: 'Company news and updates', icon: 'bell' },
+  { to: '/directory', label: 'Team Directory', desc: 'Find colleagues across teams', icon: 'users' },
 ];
 
 /** Rejlers accent families, in brand order: Deep Blue, Turbine Blue, Green, Passion, Deep Blue accent. */
@@ -29,8 +36,10 @@ const recordHours = (r) => {
   return 0;
 };
 
+/** Renders employee activity and linked service previews. No props; returns a dashboard with per-query error states. */
 const Dashboard = () => {
   const navigate = useNavigate();
+  const latestPayslip = SAMPLE_PAYSLIPS[0];
   const { user } = useAuth();
   const [applyOpen, setApplyOpen] = useState(false);
 
@@ -166,6 +175,60 @@ const Dashboard = () => {
           </section>
 
         </div>
+
+        <section aria-labelledby="company-overview-heading" className="flex flex-col gap-4">
+          <div className="flex flex-wrap items-baseline justify-between gap-2">
+            <h2 id="company-overview-heading" className="m-0 text-[18px] font-semibold text-[var(--tx)]">Your workplace at a glance</h2>
+            <span className="text-xs text-[var(--tx2)]">Sample payroll, announcements and directory</span>
+          </div>
+          <div className="grid grid-cols-1 gap-[18px] lg:grid-cols-2 xl:grid-cols-[.9fr_1.2fr_1fr]">
+            <section className="relative flex min-w-0 flex-col overflow-hidden rounded-[14px] bg-[var(--rj-deep)] p-6 text-white">
+              <div className="flex items-center justify-between gap-3">
+                <h3 className="m-0 text-[17px] font-medium">Payroll</h3>
+                <Icon name="file" size={22} color="var(--rj-green)" />
+              </div>
+              <div className="mt-7 text-xs text-white/80">Latest net pay ? {latestPayslip.period}</div>
+              <div className="mt-2 text-[30px] font-semibold tabular-nums tracking-tight">AED {latestPayslip.netPay.toLocaleString('en-US')}</div>
+              <div className="mt-3 flex items-center gap-2 text-xs text-[var(--rj-green)]"><Icon name="check" size={14} /> {latestPayslip.status}</div>
+              <dl className="mb-6 mt-6 flex flex-col gap-3 border-t border-white/20 pt-5 text-sm">
+                <div className="flex justify-between gap-3"><dt className="text-white/80">Gross pay</dt><dd className="m-0 tabular-nums">AED {latestPayslip.gross.toLocaleString('en-US')}</dd></div>
+                <div className="flex justify-between gap-3"><dt className="text-white/80">Deductions</dt><dd className="m-0 tabular-nums">AED {latestPayslip.deductions.toLocaleString('en-US')}</dd></div>
+              </dl>
+              <Link to="/payslips" className="mt-auto flex min-h-11 cursor-pointer items-center justify-between rounded-lg border border-white/30 px-4 py-3 text-sm text-white transition-colors hover:bg-white/10 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-white">View payroll <Icon name="chevronRight" size={16} /></Link>
+            </section>
+            <section className="min-w-0 rounded-[14px] border border-[var(--border)] bg-[var(--surface)] p-6">
+              <div className="mb-3 flex items-center justify-between gap-3">
+                <h3 className="m-0 text-[17px] font-semibold text-[var(--tx)]">Announcements</h3>
+                <Link to="/announcements" className="flex min-h-11 cursor-pointer items-center text-sm font-medium text-[var(--ink)] hover:underline focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2">View all</Link>
+              </div>
+              <div className="divide-y divide-[var(--border)]">
+                {SAMPLE_ANNOUNCEMENTS.slice(0, 3).map((announcement) => (
+                  <Link key={announcement.title} to="/announcements" className="group flex cursor-pointer gap-3 py-4 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--acc)]">
+                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-lg bg-[var(--ink-bg)]"><Icon name="bell" size={18} color="var(--ink)" /></div>
+                    <div className="min-w-0">
+                      <div className="text-[14px] font-medium leading-snug text-[var(--tx)] group-hover:underline">{announcement.title}</div>
+                      <p className="mb-0 mt-1 line-clamp-2 text-xs leading-relaxed text-[var(--tx2)]">{announcement.body}</p>
+                      <div className="mt-2 text-[11px] text-[var(--tx2)]">{announcement.group} ? {announcement.meta}</div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+            <section className="flex min-w-0 flex-col rounded-[14px] border border-[var(--border)] bg-[var(--surface)] p-6 lg:col-span-2 xl:col-span-1">
+              <div className="mb-3 flex items-center justify-between gap-3"><h3 className="m-0 text-[17px] font-semibold text-[var(--tx)]">Team Directory</h3><Icon name="users" size={22} color="var(--ink)" /></div>
+              <p className="m-0 text-xs leading-relaxed text-[var(--tx2)]">Connect with people across teams and offices.</p>
+              <div className="mb-5 mt-3 divide-y divide-[var(--border)]">
+                {SAMPLE_COLLEAGUES.slice(0, 3).map((colleague) => (
+                  <div key={colleague.body} className="flex items-center gap-3 py-4">
+                    <div className="grid h-10 w-10 shrink-0 place-items-center rounded-full bg-[var(--ink-bg)] text-xs font-semibold text-[var(--ink)]">{colleague.avatar}</div>
+                    <div className="min-w-0"><div className="text-sm font-medium text-[var(--tx)]">{colleague.title}</div><div className="mt-1 break-words text-xs text-[var(--tx2)]">{colleague.subtitle}</div></div>
+                  </div>
+                ))}
+              </div>
+              <Link to="/directory" className="mt-auto flex min-h-11 cursor-pointer items-center justify-between rounded-lg border border-[var(--border-2)] px-4 py-3 text-sm font-medium text-[var(--ink)] transition-colors hover:bg-[var(--surface-2)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[var(--acc)]">Find a colleague <Icon name="chevronRight" size={16} /></Link>
+            </section>
+          </div>
+        </section>
 
         <div className="grid grid-cols-1 items-start gap-[18px] xl:grid-cols-3">
           <section className="gs-fade rounded-[14px] border border-[var(--border)] bg-[var(--surface)] p-6" style={{ animationDelay: '0.22s' }}>

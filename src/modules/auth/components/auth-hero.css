@@ -1,243 +1,59 @@
-/* ── Rejlers sign-in shell ──
-   Every animated element's resting style is its *final* frame, so with reduced motion (which the
-   global stylesheet enforces by cancelling all animations) the scene still renders complete. */
-
-.rj-auth {
-  display: grid;
-  grid-template-columns: 1.1fr 1fr;
-  height: 100%;
-  gap: 20px;
-  padding: 20px;
-  overflow-y: auto;
-  background: var(--surface);
+﻿@font-face {
+  font-family: 'Rejlers Display';
+  src: url('../../../../public/brand/montefiore-regular.woff') format('woff');
+  font-weight: 400;
+  font-display: swap;
 }
 
-/* ── left: brand hero ──
-   Light & airy: a soft mist panel with graphite and green line art. Every colour is a variable so
-   dark mode can swap in a graphite-night palette without touching the rules below. */
+.rj-auth { display: grid; grid-template-columns: 1.08fr 1fr; height: 100%; gap: 24px; padding: 24px; overflow-y: auto; background: var(--surface); }
 .rj-hero {
-  --h-bg: radial-gradient(ellipse at 85% 8%, #FFFFFF 0%, transparent 55%), linear-gradient(160deg, #F7F8F6 0%, #F1F4F1 55%, #E7F0EB 100%);
-  --h-border: #E3E8E4;
-  --h-ink: #23272B;          --h-muted: #5C6268;         --h-soft: #8A9096;
-  --h-rule: rgb(72 77 82 / 12%);
-  --h-gridline: rgb(72 77 82 / 6%);
-  --h-orb-a: rgb(127 202 181 / 34%); --h-orb-b: rgb(212 237 231 / 90%); --h-orb-c: rgb(246 178 187 / 26%);
-  --h-r: rgb(72 77 82 / 5%);
-  --h-cloud: rgb(72 77 82 / 7%);     --h-persp: rgb(72 77 82 / 8%);   --h-horizon: rgb(72 77 82 / 28%);
-  --h-ground-a: #7FCAB5;
-  --h-outline: rgb(72 77 82 / 62%); --h-fill: rgb(255 255 255 / 70%); --h-steam: rgb(72 77 82 / 28%);
-  --h-tower: #484D52;        --h-blade: #484D52;          --h-hub: #FFFFFF;     --h-hub-stroke: #484D52;
-  --h-panel-a: #6A7076;      --h-panel-b: #2F3337;        --h-panel-stroke: rgb(72 77 82 / 55%);
-  --h-panel-grid: rgb(255 255 255 / 22%);                 --h-leg: rgb(72 77 82 / 40%);
-  --h-flow: #2AA784;         --h-flow-bed: rgb(42 167 132 / 18%);
-  --h-window-a: #2AA784;     --h-window-b: #EE767E;
-  --h-accent: #1F8F6F;
-  --h-word-1: #1F8F6F;       --h-word-2: #484D52;         --h-word-3: #D9555F;
-
-  position: relative;
-  isolation: isolate;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-  min-height: 740px;
-  padding: 40px 48px 32px;
-  overflow: hidden;
-  border: 1px solid var(--h-border);
-  border-radius: 28px;
-  color: var(--h-ink);
-  background: var(--h-bg);
+  --hero-ink: #2b3a55;
+  --hero-muted: #4d625c;
+  --hero-line: #bacfc4;
+  position: relative; display: flex; flex-direction: column; min-width: 0;
+  min-height: 760px; padding: 36px 38px 24px; overflow: hidden;
+  border-radius: 22px; color: var(--hero-ink); background: #e7eee8;
 }
-
-/* Dark theme: same scene on a graphite night panel, so it never glares next to the dark form. */
-:root.dark .rj-hero {
-  --h-bg: radial-gradient(ellipse at 85% 8%, rgb(127 202 181 / 10%) 0%, transparent 55%), linear-gradient(160deg, #1B1E22 0%, #23272B 55%, #1D2925 100%);
-  --h-border: #2A2F35;
-  --h-ink: #F1F3F2;          --h-muted: rgb(241 243 242 / 68%); --h-soft: rgb(241 243 242 / 50%);
-  --h-rule: rgb(255 255 255 / 10%);
-  --h-gridline: rgb(255 255 255 / 4.5%);
-  --h-orb-a: rgb(127 202 181 / 16%); --h-orb-b: rgb(42 167 132 / 12%); --h-orb-c: rgb(246 178 187 / 10%);
-  --h-r: rgb(255 255 255 / 4.5%);
-  --h-cloud: rgb(255 255 255 / 7%);  --h-persp: rgb(255 255 255 / 6%);  --h-horizon: rgb(255 255 255 / 22%);
-  --h-outline: rgb(241 243 242 / 62%); --h-fill: rgb(255 255 255 / 4%); --h-steam: rgb(255 255 255 / 28%);
-  --h-tower: rgb(241 243 242 / 90%); --h-blade: #F1F3F2;          --h-hub: #F1F3F2;     --h-hub-stroke: #23272B;
-  --h-panel-a: #5A6066;      --h-panel-b: #1B1E22;        --h-panel-stroke: rgb(127 202 181 / 45%);
-  --h-panel-grid: rgb(255 255 255 / 16%);                 --h-leg: rgb(255 255 255 / 30%);
-  --h-flow: #7FCAB5;         --h-flow-bed: rgb(127 202 181 / 18%);
-  --h-window-a: #7FCAB5;     --h-window-b: #F6B2BB;
-  --h-accent: #7FCAB5;
-  --h-word-1: #7FCAB5;       --h-word-2: #DBDBDC;         --h-word-3: #F6B2BB;
-}
-
-/* Blueprint grid - engineering paper, slowly panning, faded out toward the edges. */
-.rj-hero__grid {
-  position: absolute;
-  z-index: -2;
-  inset: -40px;
-  pointer-events: none;
-  background-image:
-    linear-gradient(var(--h-gridline) 1px, transparent 1px),
-    linear-gradient(90deg, var(--h-gridline) 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: radial-gradient(ellipse 70% 60% at 50% 45%, black 20%, transparent 75%);
-}
-
-/* Soft brand-colour aurora: Green, Green complement and Passion. */
-.rj-hero__orb {
-  position: absolute;
-  z-index: -1;
-  border-radius: 50%;
-  filter: blur(70px);
-  pointer-events: none;
-}
-.rj-hero__orb--turbine { top: -12%; right: -10%; width: 420px; height: 420px; background: var(--h-orb-b); }
-.rj-hero__orb--green { bottom: 8%; left: -14%; width: 360px; height: 360px; background: var(--h-orb-a); }
-.rj-hero__orb--passion { top: 34%; left: 38%; width: 260px; height: 260px; background: var(--h-orb-c); }
-
-/* The oversized rounded "R" from the rejlers.com hero, traced as an outline. */
-.rj-hero__r {
-  position: absolute;
-  z-index: -1;
-  top: 86px;
-  right: -36px;
-  width: 340px;
-  height: auto;
-  pointer-events: none;
-}
-.rj-hero__r path { stroke: var(--h-r); stroke-width: 34; stroke-linecap: round; stroke-linejoin: round; fill: none; }
-
-.rj-hero__header { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-.rj-hero__logo { width: 168px; height: auto; }
-
-/* ── the scene ── */
-.rj-hero__art { position: relative; display: flex; flex: 1; align-items: center; justify-content: center; margin: 18px -12px 6px; }
-.rj-scene { display: block; width: min(100%, 680px); overflow: visible; }
-
-.rj-scene__sun { fill: url(#rj-sun); }
-.rj-scene__cloud { fill: var(--h-cloud); }
-.rj-scene__perspective { stroke: var(--h-persp); stroke-width: 1; }
-.rj-scene__ground { fill: url(#rj-ground); }
-.rj-scene__ground-stop { stop-color: var(--h-ground-a); }
-.rj-scene__horizon { stroke: var(--h-horizon); stroke-width: 1.2; }
-
-.rj-scene__city { fill: var(--h-fill); stroke: var(--h-outline); stroke-width: 1.4; stroke-linejoin: round; }
-.rj-scene__window { fill: var(--h-window-a); opacity: .55; }
-.rj-scene__window--warm { fill: var(--h-window-b); }
-
-.rj-scene__factory { fill: var(--h-fill); stroke: var(--h-outline); stroke-width: 1.4; stroke-linejoin: round; }
-.rj-scene__steam { fill: none; stroke: var(--h-steam); stroke-width: 1.2; }
-
-.rj-scene__tower { fill: var(--h-tower); }
-.rj-scene__blade { fill: var(--h-blade); }
-.rj-scene__hub { fill: var(--h-hub); stroke: var(--h-hub-stroke); stroke-width: 1.5; }
-.rj-scene__blades { transform-box: fill-box; transform-origin: center; }
-
-.rj-scene__panel { fill: url(#rj-panel); stroke: var(--h-panel-stroke); stroke-width: 1; stroke-linejoin: round; }
-.rj-scene__panel-stop-a { stop-color: var(--h-panel-a); }
-.rj-scene__panel-stop-b { stop-color: var(--h-panel-b); }
-.rj-scene__panel-grid { stroke: var(--h-panel-grid); stroke-width: .7; }
-.rj-scene__panel-leg { stroke: var(--h-leg); stroke-width: 1.2; }
-.rj-scene__shimmer { fill: url(#rj-shimmer); opacity: 0; }
-
-.rj-scene__grid-line { stroke: var(--h-flow-bed); stroke-width: 3; stroke-linecap: round; fill: none; }
-.rj-scene__flow { stroke: var(--h-flow); stroke-width: 3; stroke-linecap: round; fill: none; stroke-dasharray: .012 .05; }
-
-/* ── copy ── */
-.rj-hero__copy { position: relative; max-width: 560px; }
-.rj-hero__eyebrow { margin: 0 0 14px; font-size: 12px; font-weight: 600; letter-spacing: .2em; text-transform: uppercase; color: var(--h-accent); }
-.rj-hero__title { margin: 0; font-size: clamp(30px, 3vw, 44px); font-weight: 700; line-height: 1.17; letter-spacing: -.035em; text-wrap: balance; }
-/* Fixed one-line slot the focus areas slide through; sized so the longest one fits. */
-.rj-rotator { position: relative; display: block; height: 1.25em; margin-top: .08em; overflow: hidden; font-size: .9em; color: var(--h-word-1); }
-.rj-rotator > span { position: absolute; inset: 0 auto auto 0; white-space: nowrap; opacity: 0; }
-.rj-rotator > span:first-child { opacity: 1; }
-.rj-rotator > span:nth-child(2) { color: var(--h-word-2); }
-.rj-rotator > span:nth-child(3) { color: var(--h-word-3); }
-.rj-hero__description { max-width: 400px; margin: 18px 0 0; color: var(--h-muted); font-size: 15px; line-height: 1.65; text-wrap: pretty; }
-
-.rj-hero__footer {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
-  gap: 10px 24px;
-  margin-top: 30px;
-  padding-top: 20px;
-  border-top: 1px solid var(--h-rule);
-  font-size: 12.5px;
-  color: var(--h-soft);
-}
-
-/* ── right: form column ── */
-.rj-auth__form { position: relative; display: flex; align-items: center; justify-content: center; min-width: 0; padding: 52px 28px; }
-
-/* ── motion ── */
-@media (prefers-reduced-motion: no-preference) {
-  .rj-hero__grid { animation: rj-pan 40s linear infinite; }
-  .rj-hero__orb--turbine { animation: rj-orb 16s ease-in-out infinite; }
-  .rj-hero__orb--green { animation: rj-orb 20s ease-in-out infinite reverse; }
-  .rj-hero__orb--passion { animation: rj-orb 24s ease-in-out -6s infinite; }
-  .rj-hero__r path { stroke-dasharray: 1; animation: rj-draw 2.6s cubic-bezier(.65, 0, .35, 1) .2s both; }
-
-  .rj-rise { animation: rj-rise .8s cubic-bezier(.2, .7, .2, 1) both; }
-  .rj-rise--1 { animation-delay: .1s; }
-  .rj-rise--2 { animation-delay: .25s; }
-  .rj-rise--3 { animation-delay: .4s; }
-  .rj-rise--4 { animation-delay: .55s; }
-
-  .rj-scene__sun { transform-box: fill-box; transform-origin: center; animation: rj-breathe 9s ease-in-out infinite; }
-  .rj-scene__cloud { animation: rj-cloud 30s ease-in-out infinite alternate; }
-  .rj-scene__cloud + .rj-scene__cloud { animation-duration: 38s; animation-direction: alternate-reverse; }
-  .rj-scene__draw { stroke-dasharray: 1; animation: rj-draw 2.4s cubic-bezier(.65, 0, .35, 1) .5s both; }
-  .rj-scene__draw--late { animation-delay: 1s; }
-  .rj-scene__window { animation: rj-window 6s ease-in-out infinite; }
-  .rj-scene__steam { transform-box: fill-box; transform-origin: center; animation: rj-steam 4.5s ease-out infinite; }
-  .rj-scene__blades { animation: rj-spin 7s linear infinite; }
-  .rj-scene__blades--b { animation-duration: 8.5s; }
-  .rj-scene__blades--c { animation-duration: 5.5s; }
-  .rj-scene__turbine { animation: rj-rise 1s cubic-bezier(.2, .7, .2, 1) both; }
-  .rj-scene__shimmer { animation: rj-shimmer 5s ease-in-out 1.5s infinite; }
-  .rj-scene__flow { animation: rj-flow 3.5s linear infinite; }
-
-  .rj-rotator > span { animation: rj-word 9s cubic-bezier(.65, 0, .35, 1) infinite; }
-  .rj-rotator > span:first-child { opacity: 0; }
-  .rj-rotator > span:nth-child(2) { animation-delay: 3s; }
-  .rj-rotator > span:nth-child(3) { animation-delay: 6s; }
-}
-
-@keyframes rj-pan { to { transform: translate(40px, 40px); } }
-@keyframes rj-orb { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(-30px, 26px) scale(1.12); } }
-@keyframes rj-draw { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
-@keyframes rj-rise { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
-@keyframes rj-breathe { 0%, 100% { transform: scale(1); opacity: 1; } 50% { transform: scale(1.06); opacity: .8; } }
-@keyframes rj-cloud { from { transform: translateX(-24px); } to { transform: translateX(30px); } }
-@keyframes rj-window { 0%, 100% { opacity: .55; } 45% { opacity: .15; } 55% { opacity: .85; } }
-@keyframes rj-steam { 0% { transform: translateY(0) scale(.6); opacity: 0; } 25% { opacity: 1; } 100% { transform: translateY(-34px) scale(1.5); opacity: 0; } }
-@keyframes rj-spin { to { transform: rotate(360deg); } }
-@keyframes rj-shimmer { 0% { transform: translateX(-140px); opacity: 0; } 15% { opacity: 1; } 60% { transform: translateX(220px); opacity: 0; } 100% { transform: translateX(220px); opacity: 0; } }
-@keyframes rj-flow { to { stroke-dashoffset: -.124; } }
-@keyframes rj-word {
-  0% { opacity: 0; transform: translateY(70%); }
-  5%, 30% { opacity: 1; transform: translateY(0); }
-  35%, 100% { opacity: 0; transform: translateY(-70%); }
-}
-
-@media (min-width: 1600px) {
-  .rj-hero { padding: 48px 60px 34px; }
-}
-
+:root.dark .rj-hero { --hero-ink: #e7eee8; --hero-muted: #becdc6; --hero-line: #455c52; background: #253a32; }
+.rj-hero__header { display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+.rj-hero__logo { width: 150px; height: auto; }
+.rj-hero__copy { padding: clamp(40px, 5vh, 72px) 0 30px; }
+.rj-hero__eyebrow { margin: 0 0 20px; color: var(--hero-muted); font-size: 10px; font-weight: 500; letter-spacing: .11em; text-transform: uppercase; }
+.rj-hero__copy h2 { margin: 0; font-family: 'Rejlers Display', 'Arial Narrow', sans-serif; font-size: clamp(58px, 5.6vw, 88px); font-weight: 400; line-height: .95; letter-spacing: -.02em; }
+.rj-hero__copy h2 span { text-transform: uppercase; }
+.rj-hero__description { margin: 24px 0 0; color: var(--hero-muted); font-size: 14px; line-height: 1.65; }
+.rj-hero__visual { position: relative; flex: 1; min-height: 245px; margin: 0; overflow: hidden; border-radius: 10px 10px 64px 10px; background: #2b3a55; }
+.rj-hero__photo { position: absolute; width: 100%; height: 100%; object-fit: cover; object-position: 62% center; }
+.rj-hero__photo-shade { position: absolute; inset: 0; background: linear-gradient(90deg, #162a43a6, transparent 78%), linear-gradient(0deg, #17273bba, transparent 70%); }
+.rj-hero__photo-mark { position: absolute; right: 26px; top: 24px; width: 42px; opacity: .85; }
+.rj-hero__visual figcaption { position: absolute; left: 26px; bottom: 26px; right: 24px; color: white; }
+.rj-hero__photo-label { display: block; margin-bottom: 12px; font-size: 9px; font-weight: 500; letter-spacing: .16em; text-transform: uppercase; }
+.rj-hero__photo-title { display: block; font-size: 25px; font-weight: 400; letter-spacing: -.035em; line-height: 1.2; }
+.rj-hero__footer { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px 18px; padding-top: 22px; color: var(--hero-muted); font-size: 10px; }
+.rj-hero__footer > span { display: flex; align-items: center; gap: 7px; }
+.rj-hero__footer > span::before { content: ''; width: 4px; height: 4px; border-radius: 50%; background: var(--hero-muted); }
+.rj-auth__form { position: relative; display: flex; align-items: center; justify-content: center; min-width: 0; padding: 64px 28px; }
+@media (min-width: 1600px) { .rj-hero { padding: 44px 50px 28px; } }
 @media (max-width: 1023px) {
-  .rj-auth { grid-template-columns: 1fr 1fr; gap: 0; padding: 12px; }
-  .rj-hero { min-height: 680px; padding: 28px 26px 22px; }
-  .rj-hero__logo { width: 150px; }
-  .rj-auth__form { padding: 40px 24px; }
+  .rj-auth { padding: 12px; gap: 0; grid-template-columns: 1fr 1fr; }
+  .rj-hero { min-height: 690px; padding: 28px 24px 24px; }
+  .rj-hero__copy h2 { font-size: 58px; }
+  .rj-hero__eyebrow { max-width: 210px; line-height: 1.7; }
+  .rj-hero__footer { font-size: 9px; }
+  .rj-auth__form { padding: 64px 24px 40px; }
 }
-
 @media (max-width: 767px) {
-  .rj-auth { display: flex; flex-direction: column; gap: 0; padding: 10px; }
-  .rj-hero { flex-shrink: 0; min-height: 0; padding: 22px 20px 20px; border-radius: 22px; }
-  .rj-hero__r { width: 200px; top: 50px; right: -30px; }
-  .rj-hero__art { margin: 10px -6px 4px; }
-  .rj-hero__title { font-size: 28px; }
-  .rj-hero__description { margin-top: 12px; font-size: 13.5px; }
-  .rj-hero__footer { display: none; }
-  .rj-auth__form { flex-shrink: 0; padding: 34px 12px 40px; }
+  .rj-auth { display: flex; flex-direction: column; }
+  .rj-hero { flex-shrink: 0; min-height: 0; padding: 24px; border-radius: 18px; }
+  .rj-hero__logo { width: 132px; }
+  .rj-hero__copy { padding: 32px 0 24px; }
+  .rj-hero__eyebrow { max-width: none; font-size: 8px; margin-bottom: 14px; }
+  .rj-hero__copy h2 { font-size: clamp(48px, 12vw, 68px); }
+  .rj-hero__description { font-size: 13px; margin-top: 18px; }
+  .rj-hero__visual { flex: none; min-height: 190px; border-bottom-right-radius: 44px; }
+  .rj-hero__visual figcaption { left: 20px; bottom: 20px; }
+  .rj-hero__photo-title { font-size: 22px; }
+  .rj-hero__photo-mark { width: 30px; right: 20px; top: 20px; }
+  .rj-hero__footer { gap: 9px 14px; padding-top: 18px; }
+  .rj-auth__form { flex-shrink: 0; padding: 64px 14px 40px; }
 }
